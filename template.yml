@@ -29,6 +29,7 @@ Resources:
   weatherLambda:
     Type: AWS::Serverless::Function
     Properties:
+      FunctionName: weatherLambda
       CodeUri: .
       Description: ''
       MemorySize: 512
@@ -158,6 +159,6 @@ Resources:
 
 Outputs:
   MainFunction:
-    Description: "Hello World Lambda Function ARN"
+    Description: "weatherLambda Lambda Function ARN"
     Value: !GetAtt weatherLambda.Arn
 

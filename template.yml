@@ -150,9 +150,7 @@ Resources:
         Api1:
           Type: Api
           Properties:
-            Path:
-              name: /{proxy+}
-              url: ''
+            Path: /{proxy+}
             Method: ANY
       RuntimeManagementConfig:
         UpdateRuntimeOn: Auto

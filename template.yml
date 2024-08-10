@@ -152,7 +152,7 @@ Resources:
           Properties:
             Path:
               name: /{proxy+}
-              url: ' '
+              url: ''
             Method: ANY
       RuntimeManagementConfig:
         UpdateRuntimeOn: Auto

@@ -29,7 +29,7 @@ Resources:
   weatherLambda:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: weatherLambda
+      FunctionName: 'weatherLambda'
       CodeUri: .
       Description: ''
       MemorySize: 512

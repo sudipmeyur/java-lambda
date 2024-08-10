@@ -73,15 +73,15 @@ Resources:
                 Condition:
                   StringEquals:
                     iam:PassedToService: lambda.amazonaws.com
-              - Effect: Allow
-                Action:
-                  - iam:CreateRole
-                  - iam:DetachRolePolicy
-                  - iam:PutRolePolicy
-                  - iam:AttachRolePolicy
-                  - iam:DeleteRole
-                  - iam:GetRole
-                Resource: "arn:aws:iam::*:role/*"
+#              - Effect: Allow
+#                Action:
+#                  - iam:CreateRole
+#                  - iam:DetachRolePolicy
+#                  - iam:PutRolePolicy
+#                  - iam:AttachRolePolicy
+#                  - iam:DeleteRole
+#                  - iam:GetRole
+#                Resource: "arn:aws:iam::*:role/*"
         - PolicyName: "logs"
           PolicyDocument:
             Version: "2012-10-17"

@@ -23,14 +23,7 @@ public class DynamoDbConfig {
     @Bean
     public DynamoDbClient dynamoDbClient(){
 
-        DynamoDbClient dynamoDbClient = DynamoDbClient.builder()
-//                .endpointOverride(URI.create("https://us-east-1.console.aws.amazon.com"))
-//                // The region is meaningless for local DynamoDb but required for client builder validation
-//                .region(Region.US_EAST_1)
-//
-//                .credentialsProvider(StaticCredentialsProvider.create(
-//                        AwsBasicCredentials.create("AKIAXRFLRWY7RJBX4WGB", "yaQEU8+7aBlm1HkFwpkl26nii9UUOw3zx/hYd3yY")))
-                .build();
+        DynamoDbClient dynamoDbClient = DynamoDbClient.builder().build();
 
         return dynamoDbClient;
     }

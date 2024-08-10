@@ -155,3 +155,9 @@ Resources:
             Method: ANY
       RuntimeManagementConfig:
         UpdateRuntimeOn: Auto
+
+Outputs:
+  MainFunction:
+    Description: "Hello World Lambda Function ARN"
+    Value: !GetAtt weatherLambda.Arn
+

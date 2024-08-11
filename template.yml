@@ -37,7 +37,7 @@ Resources:
       Runtime: java17
       PackageType: Zip
       Architectures:
-        - arm64
+        - Linux
       Policies:
         - Statement:
             - Effect: Allow

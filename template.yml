@@ -36,8 +36,6 @@ Resources:
       Handler: org.example.StreamLambdaHandler::handleRequest
       Runtime: java17
       PackageType: Zip
-      SnapStart:
-        ApplyOn: PublishedVersions
       Policies:
         - Statement:
             - Effect: Allow

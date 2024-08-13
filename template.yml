@@ -142,8 +142,6 @@ Resources:
           Properties:
             Path: /{proxy+}
             Method: ANY
-      RuntimeManagementConfig:
-        UpdateRuntimeOn: Auto
 
 Outputs:
   MainFunction:

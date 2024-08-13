@@ -135,7 +135,6 @@ Resources:
               - Resource: "*"
                 Effect: Allow
                 Action:
-                  - codecommit:CancelUplodaArchive
                   - codecommit:GetBranch
                   - codecommit:GetCommit
                   - codecommit:GetUploadArchiveStatus

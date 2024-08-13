@@ -36,8 +36,9 @@ Resources:
       Handler: org.example.StreamLambdaHandler::handleRequest
       Runtime: java17
       PackageType: Zip
+      ApplyOn: None
       Architectures:
-        - Linux
+        - x86_64
       Policies:
         - Statement:
             - Effect: Allow

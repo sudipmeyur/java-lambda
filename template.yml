@@ -36,6 +36,8 @@ Resources:
       Handler: org.example.StreamLambdaHandler::handleRequest
       Runtime: java17
       PackageType: Zip
+      SnapStart:
+        ApplyOn: None
       Policies:
         - Statement:
             - Effect: Allow
@@ -136,8 +138,6 @@ Resources:
                     - dynamodb.application-autoscaling.amazonaws.com
                     - contributorinsights.dynamodb.amazonaws.com
                     - kinesisreplication.dynamodb.amazonaws.com
-      SnapStart:
-        ApplyOn: None
       Events:
         Api1:
           Type: Api

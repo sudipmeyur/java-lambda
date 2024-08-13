@@ -34,7 +34,7 @@ Resources:
       MemorySize: 512
       Timeout: 15
       Handler: org.example.StreamLambdaHandler::handleRequest
-      Runtime: java8
+      Runtime: java11
       PackageType: Zip
       Policies:
         - Statement:

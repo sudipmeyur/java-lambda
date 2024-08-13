@@ -37,7 +37,7 @@ Resources:
       Runtime: java17
       PackageType: Zip
       SnapStart:
-        ApplyOn: None
+        ApplyOn: PublishedVersions
       Policies:
         - Statement:
             - Effect: Allow

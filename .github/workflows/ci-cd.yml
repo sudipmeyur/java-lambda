@@ -1,7 +1,7 @@
 name: AWS Lambda CICD
 on:
   push:
-    branches: [Main]
+    branches: [Main1]
 env:
   ACCOUNT_ID: 891612545954
 jobs:
@@ -47,7 +47,8 @@ jobs:
           API_GATEWAY_RESOURCE_ID=$(aws apigateway get-resources --rest-api-id $API_GATEWAY_ID --query "items[?parentId=='$API_GATEWAY_ROOT_RESOURCE_ID'].[id]" --output text)
           echo $API_GATEWAY_RESOURCE_ID
           aws apigateway put-method --rest-api-id $API_GATEWAY_ID --resource-id $API_GATEWAY_RESOURCE_ID --http-method ANY --authorization-type NONE
-          aws apigateway put-integration --rest-api-id $API_GATEWAY_ID --resource-id $API_GATEWAY_RESOURCE_ID --http-method ANY --type AWS_PROXY --integration-http-method POST --uri arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:$ACCOUNT_ID:function:WeatherLambda/invocations --credentials arn:aws:iam::$ACCOUNT_ID:role/apigAwsProxyRole
+          aws apigateway put-integration --rest-api-id $API_GATEWAY_ID --resource-id $API_GATEWAY_RESOURCE_ID --http-method ANY --type AWS_PROXY --integration-http-method POST --uri arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:$ACCOUNT_ID:function:WeatherLambda/invocations
+          aws lambda add-permission --function-name WeatherLambda --statement-id apigateway-all --action lambda:InvokeFunction --principal apigateway.amazonaws.com --source-arn "arn:aws:execute-api:us-east-1:$ACCOUNT_ID:$API_GATEWAY_ID/*/*/*"
           aws apigateway create-deployment --rest-api-id $API_GATEWAY_ID --stage-name dev
           echo Invoke Api = https://$API_GATEWAY_ID.execute-api.us-east-1.amazonaws.com/dev
           

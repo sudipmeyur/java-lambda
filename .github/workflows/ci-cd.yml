@@ -25,7 +25,7 @@ jobs:
         run : aws dynamodb describe-table --table-name WeatherData
         continue-on-error: true
       - name: Create AWS Dynamo DB Table
-        run: aws dynamodb create-table --table-name WeatherData --attribute-definitions AttributeName=id,AttributeType=S --key-schema AttributeName=id,KeyType=HASH --table-class STANDARD
+        run: aws dynamodb create-table --table-name WeatherData --attribute-definitions AttributeName=id,AttributeType=S --key-schema AttributeName=id,KeyType=HASH --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5 --table-class STANDARD
         continue-on-error: true
       - name: Create AWS Lambda Function
         run: |

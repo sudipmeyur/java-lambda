@@ -1,7 +1,7 @@
 name: AWS Lambda CICD
 on:
   push:
-    branches: [main]
+    branches: [Main]
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest

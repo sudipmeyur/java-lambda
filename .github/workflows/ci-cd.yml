@@ -20,7 +20,7 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: eu-north-1
+          aws-region: us-east-1
       - name: Create AWS Lambda Function
         run: |
           aws lambda create-function --function-name WeatherLambda --runtime java17 --handler org.example.StreamLambdaHandler::handleRequest --role arn:aws:iam::517903332927:role/lamda-ex --zip-file fileb://target/java-lambda-1.0-SNAPSHOT-lambda-package.zip

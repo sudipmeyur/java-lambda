@@ -1,7 +1,7 @@
 name: AWS Lambda CICD
 on:
   push:
-    branches: [Main1]
+    branches: [Main]
 env:
   ACCOUNT_ID: 891612545954
   REGION: us-east-1

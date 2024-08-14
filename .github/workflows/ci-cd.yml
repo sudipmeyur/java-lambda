@@ -40,13 +40,13 @@ jobs:
         run: |
           aws apigateway create-rest-api --name MyApi --description "My API description"  --endpoint-configuration types=REGIONAL 
           API_GATEWAY_ID=$(aws apigateway get-rest-apis --query "items[?name=='MyApi'].[id]"  --output text)
-          echo $API_GATEWAY_ID
+#          echo $API_GATEWAY_ID
           API_GATEWAY_ROOT_RESOURCE_ID=$(aws apigateway get-resources --rest-api-id $API_GATEWAY_ID --query "items[?path=='/'].[id]" --output text)
           echo $API_GATEWAY_ROOT_RESOURCE_ID
           aws apigateway create-resource --rest-api-id $API_GATEWAY_ID --parent-id $API_GATEWAY_ROOT_RESOURCE_ID --path-part "{proxy+}"
-          API_GATEWAY_RESOURCE_ID=$(aws apigateway get-resources --rest-api-id $API_GATEWAY_ID --query "items[?path=='{proxy+}'].[id]" --output text)
+          API_GATEWAY_RESOURCE_ID=$(aws apigateway get-resources --rest-api-id $API_GATEWAY_ID --query "items[?parentId==$API_GATEWAY_ROOT_RESOURCE_ID].[id]" --output text)
           echo $API_GATEWAY_RESOURCE_ID
-          aws apigateway put-method --rest-api-id $API_GATEWAY_ID --resource-id $API_GATEWAY_RESOURCE_ID --http-method ANY --authorization-type NONE
+#          aws apigateway put-method --rest-api-id $API_GATEWAY_ID --resource-id $API_GATEWAY_RESOURCE_ID --http-method ANY --authorization-type NONE
 #          aws apigateway put-integration --rest-api-id $API_GATEWAY_ID --resource-id $API_GATEWAY_RESOURCE_ID --http-method ANY --type AWS --integration-http-method ANY --uri arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:$ACCOUNT_ID:function:WeatherLambda/invocations
           
           

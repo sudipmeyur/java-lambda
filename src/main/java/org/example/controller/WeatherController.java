@@ -17,7 +17,6 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import jakarta.validation.Valid;
 
 @RestController
-@EnableWebMvc
 @Slf4j
 public class WeatherController {
 

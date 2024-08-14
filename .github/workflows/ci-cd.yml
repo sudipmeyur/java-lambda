@@ -2,6 +2,8 @@ name: AWS Lambda CICD
 on:
   push:
     branches: [Main]
+env:
+  ACCOUNT_ID: 891612545954
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -18,8 +20,8 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v3
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-access-key-id: ${{ secrets.MY_AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.MY_AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
       - name: Check AWS Dynamo DB Table Exists
         run : aws dynamodb describe-table --table-name WeatherData
@@ -29,7 +31,7 @@ jobs:
         continue-on-error: true
       - name: Create AWS Lambda Function
         run: |
-          aws lambda create-function --function-name WeatherLambda --runtime java17 --handler org.example.StreamLambdaHandler::handleRequest --role arn:aws:iam::517903332927:role/lamda-ex --zip-file fileb://target/java-lambda-1.0-SNAPSHOT-lambda-package.zip --timeout 15 --memory-size 512
+          aws lambda create-function --function-name WeatherLambda --runtime java17 --handler org.example.StreamLambdaHandler::handleRequest --role arn:aws:iam::$ACCOUNT_ID:role/lamda-ex --zip-file fileb://target/java-lambda-1.0-SNAPSHOT-lambda-package.zip --timeout 15 --memory-size 512
         continue-on-error: true  
       - name: Update Lambda Function    
         run: aws lambda update-function-code --function-name WeatherLambda --zip-file fileb://target/java-lambda-1.0-SNAPSHOT-lambda-package.zip

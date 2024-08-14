@@ -40,3 +40,5 @@ jobs:
           API_GATEWAY_ID=$(aws apigateway get-rest-apis --query "items[?name=='MyApi'].[id]"  --output text)
           echo $API_GATEWAY_ID
           API_GATEWAY_ROOT_RESOURCE_ID=$(aws apigateway get-resources --rest-api-id $API_GATEWAY_ID --query "items[?path=='/'].[id]" --output text)
+          echo $API_GATEWAY_ROOT_RESOURCE_ID
+          aws apigateway create-resource --rest-api-id $API_GATEWAY_ID --parent-id $API_GATEWAY_ROOT_RESOURCE_ID --path-part "{proxy+}"

@@ -31,8 +31,6 @@ public class WeatherController {
 
         log.info("Received Request for Weather Data");
 
-
-
         WeatherData weatherResponse = weatherDataService.processWeatherData(WeatherInput.builder().city("Kolkata").state("WB").countryCode("IN").build());
         try {
             String jsonResp = new ObjectMapper().writeValueAsString(weatherResponse);

@@ -36,7 +36,7 @@ public class WeatherController {
         WeatherData weatherResponse = weatherDataService.processWeatherData(WeatherInput.builder().city("Kolkata").state("WB").countryCode("IN").build());
         try {
             String jsonResp = new ObjectMapper().writeValueAsString(weatherResponse);
-            log.info("jsonResp = {}",jsonResp);
+            log.info("jsonResp : {}",jsonResp);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }

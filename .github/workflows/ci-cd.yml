@@ -4,6 +4,9 @@ on:
     branches: [Main1]
 env:
   ACCOUNT_ID: 891612545954
+  REGION: us-east-1
+  LAMBDA_NAME: WeatherLambda
+  STAGE: dev
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -22,7 +25,7 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.MY_AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.MY_AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
+          aws-region: $REGION
       - name: Check AWS Dynamo DB Table Exists
         run : aws dynamodb describe-table --table-name WeatherData
         continue-on-error: true
@@ -31,10 +34,10 @@ jobs:
         continue-on-error: true
       - name: Create AWS Lambda Function
         run: |
-          aws lambda create-function --function-name WeatherLambda --runtime java17 --handler org.example.StreamLambdaHandler::handleRequest --role arn:aws:iam::$ACCOUNT_ID:role/lamda-ex --zip-file fileb://target/java-lambda-1.0-SNAPSHOT-lambda-package.zip --timeout 15 --memory-size 512
+          aws lambda create-function --function-name $LAMBDA_NAME --runtime java17 --handler org.example.StreamLambdaHandler::handleRequest --role arn:aws:iam::$ACCOUNT_ID:role/lamda-ex --zip-file fileb://target/java-lambda-1.0-SNAPSHOT-lambda-package.zip --timeout 15 --memory-size 512
         continue-on-error: true  
       - name: Update Lambda Function    
-        run: aws lambda update-function-code --function-name WeatherLambda --zip-file fileb://target/java-lambda-1.0-SNAPSHOT-lambda-package.zip
+        run: aws lambda update-function-code --function-name $LAMBDA_NAME --zip-file fileb://target/java-lambda-1.0-SNAPSHOT-lambda-package.zip
         continue-on-error: true
       - name: Create Api Gateway
         run: |
@@ -47,8 +50,8 @@ jobs:
           API_GATEWAY_RESOURCE_ID=$(aws apigateway get-resources --rest-api-id $API_GATEWAY_ID --query "items[?parentId=='$API_GATEWAY_ROOT_RESOURCE_ID'].[id]" --output text)
           echo $API_GATEWAY_RESOURCE_ID
           aws apigateway put-method --rest-api-id $API_GATEWAY_ID --resource-id $API_GATEWAY_RESOURCE_ID --http-method ANY --authorization-type NONE
-          aws apigateway put-integration --rest-api-id $API_GATEWAY_ID --resource-id $API_GATEWAY_RESOURCE_ID --http-method ANY --type AWS_PROXY --integration-http-method POST --uri arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:$ACCOUNT_ID:function:WeatherLambda/invocations
-          aws lambda add-permission --function-name WeatherLambda --statement-id apigateway-all --action lambda:InvokeFunction --principal apigateway.amazonaws.com --source-arn "arn:aws:execute-api:us-east-1:$ACCOUNT_ID:$API_GATEWAY_ID/*/*/*"
-          aws apigateway create-deployment --rest-api-id $API_GATEWAY_ID --stage-name dev
-          echo Invoke Api = https://$API_GATEWAY_ID.execute-api.us-east-1.amazonaws.com/dev
+          aws apigateway put-integration --rest-api-id $API_GATEWAY_ID --resource-id $API_GATEWAY_RESOURCE_ID --http-method ANY --type AWS_PROXY --integration-http-method POST --uri arn:aws:apigateway:$REGION:lambda:path/2015-03-31/functions/arn:aws:lambda:$REGION:$ACCOUNT_ID:function:$LAMBDA_NAME/invocations
+          aws lambda add-permission --function-name $LAMBDA_NAME --statement-id apigateway-all --action lambda:InvokeFunction --principal apigateway.amazonaws.com --source-arn "arn:aws:execute-api:$REGION:$ACCOUNT_ID:$API_GATEWAY_ID/*/*/*"
+          aws apigateway create-deployment --rest-api-id $API_GATEWAY_ID --stage-name $STAGE
+          echo Invoke Api = https://$API_GATEWAY_ID.execute-api.$REGION.amazonaws.com/$STAGE
           

@@ -28,11 +28,14 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
       - name: Check lambda Ex Role exists
+        id: CheckLambdaExRole
         run: |
           echo "Checking Role Exist or not"
           ROLE_INFO=$(aws iam get-role --role-name lambda-ex --query "Role.RoleId" --output text)
           echo $ROLE_INFO
+        continue-on-error: true
       - name: Create lambda Ex Role
+        if: steps.CheckLambdaExRole.outcome != 'success'
         run: |
           aws iam create-role --role-name $LAMBDA_EX_ROLE --assume-role-policy-document file://src/main/resources/trust-policy.json
           aws iam attach-role-policy --role-name $LAMBDA_EX_ROLE --policy-arn arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole

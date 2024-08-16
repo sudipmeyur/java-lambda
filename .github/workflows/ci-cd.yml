@@ -29,6 +29,7 @@ jobs:
           aws-region: us-east-1
       - name: Check lambda Ex Role exists
         run: |
+          echo "Checking Role Exist or not"
           ROLE_INFO=$(aws iam get-role --role-name lambda-ex --query "Role.RoleId")
           if [ "${{ ROLE_INFO }}" == "" ]; then
             echo "Role Does not Exist"
@@ -48,6 +49,7 @@ jobs:
         continue-on-error: true
       - name: Check lambda Ex Role exists Again
         run: |
+          echo "Checking Role Exist or not"
           ROLE_INFO=$(aws iam get-role --role-name lambda-ex --query "Role.RoleId")
           if [ "${{ ROLE_INFO }}" == "" ]; then
             echo "Role Does not Exist"

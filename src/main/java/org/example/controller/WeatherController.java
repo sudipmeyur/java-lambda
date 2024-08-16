@@ -29,6 +29,7 @@ public class WeatherController {
     @RequestMapping(path = "/test", method = RequestMethod.GET)
     public ResponseEntity<WeatherData> weather() {
 
+
         log.info("Received Request for Weather Data");
 
         WeatherData weatherResponse = weatherDataService.processWeatherData(WeatherInput.builder().city("Kolkata").state("WB").countryCode("IN").build());

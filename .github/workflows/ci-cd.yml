@@ -40,7 +40,7 @@ jobs:
           aws iam attach-role-policy --role-name $LAMBDA_EX_ROLE --policy-arn arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess
       - name: Create AWS Lambda Function
         run: |
-          aws lambda create-function --function-name $LAMBDA_NAME --runtime java17 --handler org.example.StreamLambdaHandler::handleRequest --role arn:aws:iam::$ACCOUNT_ID:role/lambda-ex --zip-file fileb://target/java-lambda-1.0-SNAPSHOT-lambda-package.zip --timeout 15 --memory-size 512
+          aws lambda create-function --function-name $LAMBDA_NAME --runtime java17 --handler org.example.StreamLambdaHandler::handleRequest --role arn:aws:iam::$ACCOUNT_ID:role/$LAMBDA_EX_ROLE --zip-file fileb://target/java-lambda-1.0-SNAPSHOT-lambda-package.zip --timeout 15 --memory-size 512
         continue-on-error: true  
       - name: Update Lambda Function    
         run: aws lambda update-function-code --function-name $LAMBDA_NAME --zip-file fileb://target/java-lambda-1.0-SNAPSHOT-lambda-package.zip

@@ -6,6 +6,7 @@ env:
   ACCOUNT_ID: 517903332927
   REGION: us-east-1
   LAMBDA_NAME: WeatherLambda
+  LAMBDA_EX_ROLE: lambda-ex
   STAGE: dev
 jobs:
   build-and-deploy:
@@ -32,9 +33,14 @@ jobs:
       - name: Create AWS Dynamo DB Table
         run: aws dynamodb create-table --table-name WeatherData --attribute-definitions AttributeName=id,AttributeType=S --key-schema AttributeName=id,KeyType=HASH --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5 --table-class STANDARD
         continue-on-error: true
+      - name: Create lambda Ex Role
+        run: |
+          aws iam create-role --role-name $LAMBDA_EX_ROLE --assume-role-policy-document file://src/main/resources/trust-policy.json
+          aws iam attach-role-policy --role-name $LAMBDA_EX_ROLE --policy-arn arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+          aws iam attach-role-policy --role-name $LAMBDA_EX_ROLE --policy-arn arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess
       - name: Create AWS Lambda Function
         run: |
-          aws lambda create-function --function-name $LAMBDA_NAME --runtime java17 --handler org.example.StreamLambdaHandler::handleRequest --role arn:aws:iam::$ACCOUNT_ID:role/lamda-ex --zip-file fileb://target/java-lambda-1.0-SNAPSHOT-lambda-package.zip --timeout 15 --memory-size 512
+          aws lambda create-function --function-name $LAMBDA_NAME --runtime java17 --handler org.example.StreamLambdaHandler::handleRequest --role arn:aws:iam::$ACCOUNT_ID:role/$LAMBDA_EX_ROLE --zip-file fileb://target/java-lambda-1.0-SNAPSHOT-lambda-package.zip --timeout 15 --memory-size 512
         continue-on-error: true  
       - name: Update Lambda Function    
         run: aws lambda update-function-code --function-name $LAMBDA_NAME --zip-file fileb://target/java-lambda-1.0-SNAPSHOT-lambda-package.zip

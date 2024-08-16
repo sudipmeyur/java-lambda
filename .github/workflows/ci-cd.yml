@@ -30,12 +30,8 @@ jobs:
       - name: Check lambda Ex Role exists
         run: |
           echo "Checking Role Exist or not"
-          ROLE_INFO=$(aws iam get-role --role-name lambda-ex --query "Role.RoleId")
-          if [ "${{ ROLE_INFO }}" == "" ]; then
-            echo "Role Does not Exist"
-          else
-            echo "Role Exists"
-          fi
+          ROLE_INFO=$(aws iam get-role --role-name lambda-ex --query "Role.RoleId" --output text)
+          echo $ROLE_INFO
       - name: Create lambda Ex Role
         run: |
           aws iam create-role --role-name $LAMBDA_EX_ROLE --assume-role-policy-document file://src/main/resources/trust-policy.json
@@ -50,12 +46,8 @@ jobs:
       - name: Check lambda Ex Role exists Again
         run: |
           echo "Checking Role Exist or not"
-          ROLE_INFO=$(aws iam get-role --role-name lambda-ex --query "Role.RoleId")
-          if [ "${{ ROLE_INFO }}" == "" ]; then
-            echo "Role Does not Exist"
-          else
-            echo "Role Exists"
-          fi
+          ROLE_INFO=$(aws iam get-role --role-name lambda-ex --query "Role.RoleId" --output text)
+          echo $ROLE_INFO
       - name: Create AWS Lambda Function
         run: |
           aws lambda create-function --function-name $LAMBDA_NAME --runtime java17 --handler org.example.StreamLambdaHandler::handleRequest --role arn:aws:iam::$ACCOUNT_ID:role/$LAMBDA_EX_ROLE --zip-file fileb://target/java-lambda-1.0-SNAPSHOT-lambda-package.zip --timeout 15 --memory-size 512

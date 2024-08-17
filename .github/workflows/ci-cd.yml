@@ -56,10 +56,19 @@ jobs:
         run: |
           aws lambda create-function --function-name $LAMBDA_NAME --runtime java17 --handler org.example.StreamLambdaHandler::handleRequest --role arn:aws:iam::$ACCOUNT_ID:role/$LAMBDA_EX_ROLE --zip-file fileb://target/java-lambda-1.0-SNAPSHOT-lambda-package.zip --timeout 15 --memory-size 512
       - name: Check Api Gateway
-        run: aws apigateway get-rest-apis --query "items[?name=='MyApi']"
+        id: CheckApiGateWay
+        run: |
+          API_GATEWAY_ID=$(aws apigateway get-rest-apis --query "items[?name=='MyApi'].[id]"  --output text)
+          echo "api_gateway_id=$API_GATEWAY_ID" >> "$GITHUB_OUTPUT"
         continue-on-error: true
       - name: Create Api Gateway
+        if: steps.CheckApiGateWay.outputs.api_gateway_id == ''
         run: |
+          if [ ${{ steps.CheckApiGateWay.outputs.api_gateway_id == '' }} ]; then
+          echo "Api Does not Exist"
+          else
+          echo "Api Exists"
+          fi
           aws apigateway create-rest-api --name MyApi --description "My API description"  --endpoint-configuration types=REGIONAL 
           API_GATEWAY_ID=$(aws apigateway get-rest-apis --query "items[?name=='MyApi'].[id]"  --output text)
           echo $API_GATEWAY_ID

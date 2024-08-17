@@ -23,10 +23,6 @@ public class WeatherDataServiceImpl implements WeatherDataService{
         this.weatherAdaptor = weatherAdaptor;
         this.weatherTransformer = weatherTransformer;
     }
-//    public WeatherDataServiceImpl(WeatherAdaptor weatherAdaptor, WeatherTransformer weatherTransformer) {
-//        this.weatherAdaptor = weatherAdaptor;
-//        this.weatherTransformer = weatherTransformer;
-//    }
 
     @Override
     public WeatherData processWeatherData(WeatherInput input) throws WeatherException {
@@ -44,7 +40,8 @@ public class WeatherDataServiceImpl implements WeatherDataService{
         }
         if(weatherJson != null){
             weatherData = weatherTransformer.transformToWeatherData(weatherJson);
-            weatherData = weatherDataRepository.create(weatherData);
+            weatherDataRepository.create(weatherData);
+            weatherData = weatherDataRepository.get(weatherData.getId());
         }
         return weatherData;
     }

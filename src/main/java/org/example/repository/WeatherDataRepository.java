@@ -6,6 +6,7 @@ import org.example.domain.WeatherData;
 import org.example.exception.WeatherException;
 import org.springframework.stereotype.Repository;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbTable;
+import software.amazon.awssdk.enhanced.dynamodb.Key;
 
 @Repository
 @AllArgsConstructor
@@ -22,5 +23,9 @@ public class WeatherDataRepository {
             throw new WeatherException("Exception in saving weather data",e);
         }
         return weatherData;
+    }
+
+    public WeatherData get(String weatherDataId){
+        return weatherDataTable.getItem(Key.builder().partitionValue(weatherDataId).build());
     }
 }

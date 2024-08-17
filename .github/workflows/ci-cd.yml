@@ -3,7 +3,7 @@ on:
   push:
     branches: [Main]
 env:
-  ACCOUNT_ID: 517903332927
+  ACCOUNT_ID: 891612545954
   REGION: us-east-1
   LAMBDA_NAME: WeatherLambda
   LAMBDA_EX_ROLE: lambda-ex
@@ -24,8 +24,8 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v3
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-access-key-id: ${{ secrets.MY_AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.MY_AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
       - name: Check lambda Ex Role exists
         id: CheckLambdaExRole

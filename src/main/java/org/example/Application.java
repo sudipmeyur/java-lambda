@@ -1,11 +1,7 @@
 package org.example;
 
-import org.example.controller.WeatherController;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Import;
-
-import org.example.controller.PingController;
 
 
 @SpringBootApplication

@@ -59,16 +59,16 @@ jobs:
         id: CheckApiGateWay
         run: |
           API_GATEWAY_ID=$(aws apigateway get-rest-apis --query "items[?name=='MyApi'].[id]"  --output text)
+          if [ ${{ API_GATEWAY_ID != '' }} ]; then
+          echo Invoke Api = https://$API_GATEWAY_ID.execute-api.$REGION.amazonaws.com/$STAGE
+          else
+          echo "Api does not exist"
+          fi
           echo "api_gateway_id=$API_GATEWAY_ID" >> "$GITHUB_OUTPUT"
         continue-on-error: true
       - name: Create Api Gateway
         if: steps.CheckApiGateWay.outputs.api_gateway_id == ''
         run: |
-          if [ ${{ steps.CheckApiGateWay.outputs.api_gateway_id == '' }} ]; then
-          echo "Api Does not Exist"
-          else
-          echo "Api Exists"
-          fi
           aws apigateway create-rest-api --name MyApi --description "My API description"  --endpoint-configuration types=REGIONAL 
           API_GATEWAY_ID=$(aws apigateway get-rest-apis --query "items[?name=='MyApi'].[id]"  --output text)
           echo $API_GATEWAY_ID

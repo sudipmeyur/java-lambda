@@ -86,6 +86,18 @@ jobs:
           aws lambda add-permission --function-name $LAMBDA_NAME --statement-id apigateway-all --action lambda:InvokeFunction --principal apigateway.amazonaws.com --source-arn "arn:aws:execute-api:$REGION:$ACCOUNT_ID:$API_GATEWAY_ID/*/*/*"
           aws apigateway create-deployment --rest-api-id $API_GATEWAY_ID --stage-name $STAGE
           echo Invoke Api = https://$API_GATEWAY_ID.execute-api.$REGION.amazonaws.com/$STAGE
+      - name: Check Api Invoke Role exists
+        id: CheckApiInvokeRole
+        run: |
+          echo "Checking Role Exist or not"
+          ROLE_INFO=$(aws iam get-role --role-name api-gateway-invoke --query "Role.RoleId" --output text)
+          echo $ROLE_INFO
+        continue-on-error: true
+      - name: Create Api Invoke Role
+        if: steps.CheckApiInvokeRole.outcome != 'success'
+        run: |
+          aws iam create-role --role-name $API_INVOKE_ROLE --assume-role-policy-document file://.github/workflows/trust-policy-events.json
+          aws iam attach-role-policy --role-name $API_INVOKE_ROLE --policy-arn arn:aws:iam::aws:policy/AmazonAPIGatewayInvokeFullAccess
       - name: Check Event Bridge
         id: CheckEventBridge
         run: aws events describe-rule --name $EVENT_RULE_NAME

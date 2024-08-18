@@ -1,6 +1,7 @@
 package org.example.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import lombok.extern.slf4j.Slf4j;
 import org.example.adaptor.WeatherAdaptor;
 import org.example.domain.WeatherData;
 import org.example.exception.WeatherException;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Iterator;
 
+@Slf4j
 @Service
 public class WeatherDataServiceImpl implements WeatherDataService{
 
@@ -42,6 +44,7 @@ public class WeatherDataServiceImpl implements WeatherDataService{
             weatherData = weatherTransformer.transformToWeatherData(weatherJson);
             weatherDataRepository.create(weatherData);
             weatherData = weatherDataRepository.get(weatherData.getId());
+            log.info("Saved Weather Data with Id : {}",weatherData.getId());
         }
         return weatherData;
     }

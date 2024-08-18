@@ -15,17 +15,23 @@ public class WeatherDataRepository {
 
     private DynamoDbTable<WeatherData> weatherDataTable;
 
-    public WeatherData create(WeatherData weatherData) {
+    public void create(WeatherData weatherData) {
         try {
             weatherDataTable.putItem(weatherData);
         }catch (Exception e){
             log.error("Exception in saving weather data ex = {}",e);
             throw new WeatherException("Exception in saving weather data",e);
         }
-        return weatherData;
     }
 
     public WeatherData get(String weatherDataId){
-        return weatherDataTable.getItem(Key.builder().partitionValue(weatherDataId).build());
+        WeatherData weatherData = null;
+        try {
+            weatherData = weatherDataTable.getItem(Key.builder().partitionValue(weatherDataId).build());
+        }catch (Exception e){
+            log.error("Exception in getting weather data ex = {}",e);
+            throw new WeatherException("Exception in getting weather data",e);
+        }
+        return weatherData;
     }
 }

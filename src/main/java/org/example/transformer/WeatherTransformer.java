@@ -1,7 +1,6 @@
 package org.example.transformer;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.JsonNodeType;
 import org.example.domain.*;
 import org.springframework.stereotype.Service;
 

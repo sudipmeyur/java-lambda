@@ -3,26 +3,13 @@ package org.example.exception.advice;
 import jakarta.servlet.http.HttpServletRequest;
 import org.example.exception.WeatherException;
 import org.example.exception.response.ExceptionResponse;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-
 @RestControllerAdvice
-public class RestResponseEntityExceptionHandler/* extends ResponseEntityExceptionHandler*/ {
-
-//    @ExceptionHandler(WeatherException.class)
-//    protected ResponseEntity<Object> handleConflict(
-//            RuntimeException ex, WebRequest request) {
-//        String bodyOfResponse = "This should be application specific";
-//        return handleExceptionInternal(ex, bodyOfResponse,
-//                new HttpHeaders(), HttpStatus.CONFLICT, request);
-//    }
+public class RestResponseEntityExceptionHandler{
 
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     public ExceptionResponse handleWeatherException(final WeatherException exception

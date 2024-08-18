@@ -11,7 +11,6 @@ env:
   API_GATEWAY_NAME: MyApi
   API_INVOKE_ROLE: api-gateway-invoke
   EVENT_RULE_NAME: MyEventRule
-  SCHEDULE_EXPRESSION: rate(1 minute)
   STAGE: dev
 jobs:
   build-and-deploy:
@@ -106,7 +105,7 @@ jobs:
       - name: Create Event Bridge
         if: steps.CheckEventBridge.outcome != 'success'
         run: |
-          aws events put-rule --name $EVENT_RULE_NAME --schedule-expression '${{ SCHEDULE_EXPRESSION }}'
+          aws events put-rule --name $EVENT_RULE_NAME --schedule-expression 'rate(1 minute)'
           API_GATEWAY_ID=$(aws apigateway get-rest-apis --query "items[?name=='$API_GATEWAY_NAME'].[id]"  --output text)
           aws events put-targets --rule $EVENT_RULE_NAME --targets "Id"="1","Arn"="arn:aws:execute-api:$REGION:$ACCOUNT_ID:$API_GATEWAY_ID/$STAGE/*/*","HttpParameters"="{PathParameterValues=[\"weather\"]}","RoleArn"="arn:aws:iam::$ACCOUNT_ID:role/$API_INVOKE_ROLE","Input"="'{\"city\":\"Kolkata\",\"state\":\"WB\",\"countryCode\":\"IN\"}'"
         

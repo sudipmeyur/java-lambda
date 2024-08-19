@@ -20,7 +20,7 @@ public class WeatherAdaptor {
         this.restTemplate = restTemplate;
     }
 
-    @Value("weather.app.id")
+    @Value("${weather.app.id}")
     private String appId;
     
     public JsonNode getWeatherData(double lat,double lon) throws WeatherException {
